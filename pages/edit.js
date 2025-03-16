@@ -6,12 +6,13 @@ import { useTheme } from "next-themes";
 
 // Data
 import yourData from "../data/portfolio.json";
-import Cursor from "../components/Cursor";
 
 const Edit = () => {
   // states
   const [data, setData] = useState(yourData);
   const [currentTabs, setCurrentTabs] = useState("HEADER");
+  const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const { theme } = useTheme();
 
   const saveData = () => {
@@ -146,11 +147,22 @@ const Edit = () => {
     });
   };
 
+  const handleSave = () => {
+    saveData();
+    setShowToast(true);
+  };
+
   return (
-    <div className={`container mx-auto ${data.showCursor && "cursor-none"}`}>
-      <Header isBlog></Header>
-      {data.showCursor && <Cursor />}
+    <div className={`container mx-auto ${theme === "dark" ? "dark" : ""}`}>
+      <Header />
       <div className="mt-10">
+        <div className="flex items-center">
+          <h1 className="text-4xl">Edit Data</h1>
+          <Button onClick={handleSave} type="primary" classes="ml-4">
+            Save
+          </Button>
+        </div>
+
         <div className={`${theme === "dark" ? "bg-transparent" : "bg-white"}`}>
           <div className="flex items-center justify-between">
             <h1 className="text-4xl">Dashboard</h1>
@@ -315,25 +327,6 @@ const Edit = () => {
                   onClick={() => setData({ ...data, showResume: false })}
                   classes={
                     !data.showResume && "bg-red-500 text-white hover:bg-red-600"
-                  }
-                >
-                  No
-                </Button>
-              </div>
-            </div>
-            <div className="mt-5 flex items-center">
-              <label className="w-1/5 text-lg opacity-50">Custom Cursor</label>
-              <div className="w-4/5 ml-10 flex items-center">
-                <Button
-                  onClick={() => setData({ ...data, showCursor: true })}
-                  type={data.showCursor && "primary"}
-                >
-                  Yes
-                </Button>
-                <Button
-                  onClick={() => setData({ ...data, showCursor: false })}
-                  classes={
-                    !data.showCursor && "bg-red-500 text-white hover:bg-red-600"
                   }
                 >
                   No
@@ -904,6 +897,12 @@ const Edit = () => {
           </div>
         )}
       </div>
+
+      {showToast && (
+        <div className="fixed bottom-10 right-10 bg-green-500 text-white p-4 rounded-lg shadow-lg">
+          Changes Saved Successfully
+        </div>
+      )}
     </div>
   );
 };

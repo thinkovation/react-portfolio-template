@@ -4,8 +4,6 @@ import DatePicker from "react-datepicker";
 import TextareaAutosize from "react-textarea-autosize";
 import { useTheme } from "next-themes";
 
-import "react-datepicker/dist/react-datepicker.css";
-
 const BlogEditor = ({ post, close, refresh }) => {
   const { theme } = useTheme();
   const [currentTabs, setCurrentTabs] = useState("BLOGDETAILS");

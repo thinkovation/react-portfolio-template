@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useRouter } from "next/router";
 import Header from "../components/Header";
 import ServiceCard from "../components/ServiceCard";
 import Socials from "../components/Socials";
@@ -9,12 +10,16 @@ import Footer from "../components/Footer";
 import Head from "next/head";
 import Button from "../components/Button";
 import Link from "next/link";
-import Cursor from "../components/Cursor";
+import { useEffect, useState } from "react";
+import LoginDialog from "../components/LoginDialog";
 
 // Local Data
 import data from "../data/portfolio.json";
 
 export default function Home() {
+  const router = useRouter();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
   // Ref
   const workRef = useRef();
   const aboutRef = useRef();
@@ -22,6 +27,15 @@ export default function Home() {
   const textTwo = useRef();
   const textThree = useRef();
   const textFour = useRef();
+
+  // Handle /login route
+  useEffect(() => {
+    if (router.pathname === '/login') {
+      setIsLoginOpen(true);
+      // Update URL without refreshing
+      window.history.replaceState({}, '', '/');
+    }
+  }, [router.pathname]);
 
   // Handling Scroll
   const handleWorkScroll = () => {
@@ -50,11 +64,10 @@ export default function Home() {
 
   return (
     <div className={`relative ${data.showCursor && "cursor-none"}`}>
-      {data.showCursor && <Cursor />}
       <Head>
         <title>{data.name}</title>
       </Head>
-
+      <LoginDialog isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
       <div className="gradient-circle"></div>
       <div className="gradient-circle-bottom"></div>
 
@@ -62,6 +75,8 @@ export default function Home() {
         <Header
           handleWorkScroll={handleWorkScroll}
           handleAboutScroll={handleAboutScroll}
+          isLoginOpen={isLoginOpen}
+          setIsLoginOpen={setIsLoginOpen}
         />
         <div className="laptop:mt-20 mt-10">
           <div className="mt-5">

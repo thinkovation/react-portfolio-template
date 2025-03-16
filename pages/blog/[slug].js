@@ -9,7 +9,6 @@ import { stagger } from "../../animations";
 import Button from "../../components/Button";
 import BlogEditor from "../../components/BlogEditor";
 import { useRouter } from "next/router";
-import Cursor from "../../components/Cursor";
 import data from "../../data/portfolio.json";
 
 const BlogPost = ({ post }) => {
@@ -23,18 +22,14 @@ const BlogPost = ({ post }) => {
   }, []);
 
   return (
-    <>
+    <div className={`relative ${data.showCursor && "cursor-none"}`}>
       <Head>
         <title>{"Blog - " + post.title}</title>
         <meta name="description" content={post.preview} />
       </Head>
-      {data.showCursor && <Cursor />}
-
-      <div
-        className={`container mx-auto mt-10 ${
-          data.showCursor && "cursor-none"
-        }`}
-      >
+      <div className="gradient-circle"></div>
+      <div className="gradient-circle-bottom"></div>
+      <div className="container mx-auto mt-10">
         <Header isBlog={true} />
         <div className="mt-10 flex flex-col">
           <img
@@ -73,7 +68,7 @@ const BlogPost = ({ post }) => {
           refresh={() => router.reload(window.location.pathname)}
         />
       )}
-    </>
+    </div>
   );
 };
 
